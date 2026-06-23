@@ -5,111 +5,162 @@
   --font-serif: "Source Serif 4", serif;
   --radius: 1rem;
   
-  /* Grayscale color configuration */
-  --color-neutral-50: hsl(0 0% 98%);
-  --color-neutral-100: hsl(0 0% 96%);
-  --color-neutral-200: hsl(0 0% 90%);
-  --color-neutral-300: hsl(0 0% 80%);
-  --color-neutral-400: hsl(0 0% 70%);
-  --color-neutral-500: hsl(0 0% 50%);
-  --color-neutral-600: hsl(0 0% 40%);
-  --color-neutral-700: hsl(0 0% 30%);
-  --color-neutral-800: hsl(0 0% 20%);
-  --color-neutral-900: hsl(0 0% 10%);
-  --color-neutral-950: hsl(0 0% 5%);
+  /* Custom Design Tokens */
+  --color-accent-teal: #00FFB4;
+  --color-text-white: #F0F0F0;
 }
 
-/* Custom Base styles */
+/* Base styles */
 body {
   font-family: var(--font-sans);
   background-color: #000;
-  color: #fff;
+  color: #F0F0F0;
   margin: 0;
   overflow: hidden;
 }
 
-/* Glassmorphism Styles */
+/* Text Shadow for better contrast over planet image */
+.hero-text-shadow {
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.95), 0 2px 5px rgba(0, 0, 0, 0.8);
+}
+
+.hero-text-glow {
+  text-shadow: 0 0 25px rgba(0, 0, 0, 0.95), 0 0 10px rgba(0, 0, 0, 0.9), 0 2px 4px rgba(0, 0, 0, 0.9);
+}
+
+/* Glassmorphism Styles (as per universal rules) */
+.glass-panel-dark {
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: none;
+}
+
+.glass-panel-light {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: none;
+}
+
+/* Glass input fields style */
+.glass-input {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #F0F0F0;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.glass-input:focus {
+  border-color: #00FFB4;
+  box-shadow: 0 0 10px rgba(0, 255, 180, 0.25);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Premium Spotlight Card style with cursor tracking */
+.spotlight-card {
+  position: relative;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Spotlight inner radial glow */
+.spotlight-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    400px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
+    rgba(0, 255, 180, 0.06),
+    transparent 80%
+  );
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+/* Spotlight border glow using mask */
+.spotlight-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(
+    250px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
+    rgba(0, 255, 180, 0.45) 0%,
+    rgba(0, 255, 180, 0.1) 40%,
+    transparent 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 2;
+  transition: opacity 0.35s ease;
+}
+
+.spotlight-card:hover {
+  background: rgba(0, 0, 0, 0.75);
+  border-color: rgba(0, 255, 180, 0.15);
+  box-shadow: 0 0 25px rgba(0, 255, 180, 0.1);
+}
+
+.spotlight-card:hover::before,
+.spotlight-card:hover::after {
+  opacity: 1;
+}
+
+/* Keep liquid-glass styles as backup or mapping to spotlight cards */
 .liquid-glass {
-  background: rgba(255, 255, 255, 0.01);
-  background-blend-mode: luminosity;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  border: none;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
-  position: relative;
-  overflow: hidden;
+  composes: spotlight-card;
 }
 
-.liquid-glass::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1.4px;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.45) 0%,
-    rgba(255, 255, 255, 0.15) 20%,
-    transparent 40%,
-    transparent 60%,
-    rgba(255, 255, 255, 0.15) 80%,
-    rgba(255, 255, 255, 0.45) 100%
-  );
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
+/* Shimmer border animation for BCT Token Card */
+@keyframes shimmerBorder {
+  0% {
+    border-color: rgba(0, 255, 180, 0.2);
+    box-shadow: 0 0 15px rgba(0, 255, 180, 0.15);
+  }
+  50% {
+    border-color: rgba(0, 255, 180, 0.65);
+    box-shadow: 0 0 30px rgba(0, 255, 180, 0.4);
+  }
+  100% {
+    border-color: rgba(0, 255, 180, 0.2);
+    box-shadow: 0 0 15px rgba(0, 255, 180, 0.15);
+  }
 }
 
-.liquid-glass-strong {
-  background: rgba(255, 255, 255, 0.01);
-  background-blend-mode: luminosity;
-  backdrop-filter: blur(50px);
-  -webkit-backdrop-filter: blur(50px);
-  border: none;
-  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.15);
-  position: relative;
-  overflow: hidden;
+.animate-shimmer-border {
+  border: 1px solid rgba(0, 255, 180, 0.2);
+  animation: shimmerBorder 4s infinite ease-in-out;
 }
 
-.liquid-glass-strong::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1.4px;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.5) 0%,
-    rgba(255, 255, 255, 0.2) 20%,
-    transparent 40%,
-    transparent 60%,
-    rgba(255, 255, 255, 0.2) 80%,
-    rgba(255, 255, 255, 0.5) 100%
-  );
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-/* Micro-animations and transitions */
+/* Transitions */
 .hover-scale {
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease, opacity 0.3s ease;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .hover-scale:hover {
-  transform: scale(1.05);
+  transform: scale(1.03);
 }
 
 .hover-scale:active {
-  transform: scale(0.95);
+  transform: scale(0.97);
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: scale(0.99);
+    transform: scale(0.995);
   }
   to {
     opacity: 1;
@@ -118,5 +169,19 @@ body {
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Pulsing Neon Glow Animation for Admin Trendline */
+@keyframes pulseGlowOpacity {
+  0%, 100% {
+    opacity: 0.65;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.animate-trend-glow {
+  animation: pulseGlowOpacity 2.5s infinite ease-in-out;
 }
